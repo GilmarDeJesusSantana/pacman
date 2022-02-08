@@ -1,7 +1,7 @@
 import pygame
 
 from cenario import Cenario
-from constantes import VERMELHO, PRETO
+from constantes import VERMELHO, PRETO, BRANCO
 from fantasma import Fantasma
 from pacman import Pacman
 
@@ -12,7 +12,7 @@ fonte = pygame.font.SysFont('arial', 24, True, False)
 
 size = 600 // 30
 pacman = Pacman(size)
-blinky = Fantasma(VERMELHO, size)
+blinky = Fantasma(VERMELHO, BRANCO, PRETO, size)
 cenario = Cenario(size, pacman, fonte)
 
 while True:
