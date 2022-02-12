@@ -1,12 +1,17 @@
-import pygame
+import pygame, random
 
+from constantes import ACIMA, ABAIXO, ESQUERDA, DIREITA
 from elementos_jogo import ElementosJogo
 
 
 class Fantasma(ElementosJogo):
     def __init__(self, cor, cor_externa, cor_interna, tamanho):
         self.coluna = 6.0
-        self.linha = 8.0
+        self.linha = 2.0
+        self.linha_intencao = self.linha
+        self.coluna_intencao = self.coluna
+        self.velocidade = 1
+        self.direcao = ABAIXO
         self.tamanho = tamanho
         self.cor = cor
         self.cor_extrana = cor_externa
@@ -38,13 +43,13 @@ class Fantasma(ElementosJogo):
 
         pygame.draw.circle(
             tela, self.cor_extrana,
-            (olho_esquerdo_x,olho_esquerdo_y),
+            (olho_esquerdo_x, olho_esquerdo_y),
             olho_raio_externo, 0
         )
 
         pygame.draw.circle(
             tela, self.cor_interna,
-            (olho_esquerdo_x,olho_esquerdo_y),
+            (olho_esquerdo_x, olho_esquerdo_y),
             olho_raio_interno, 0
         )
 
@@ -56,12 +61,34 @@ class Fantasma(ElementosJogo):
 
         pygame.draw.circle(
             tela, self.cor_interna,
-            (olho_direito_x,olho_direito_y),
+            (olho_direito_x, olho_direito_y),
             olho_raio_interno, 0
         )
 
     def calcular_regras(self):
-        pass
+        if self.direcao == ACIMA:
+            self.linha_intencao -= self.velocidade
+        elif self.direcao == ABAIXO:
+            self.linha_intencao += self.velocidade
+        elif self.direcao == ESQUERDA:
+            self.coluna_intencao -= self.velocidade
+        elif self.direcao == DIREITA:
+            self.coluna_intencao -= self.velocidade
+
+    def mudar_direcao(self, direcoes):
+        self.direcao = random.choice(direcoes)
+
+    def esquina(self, direcoes):
+        self.mudar_direcao(direcoes)
+
+    def aceitar_movimento(self):
+        self.linha = self.linha_intencao
+        self.coluna = self.coluna_intencao
+
+    def recusar_movimento(self, direcoes):
+        self.linha_intencao = self.linha
+        self.coluna_intencao = self.coluna
+        self.mudar_direcao(direcoes)
 
     def processar_eventos(self, eventos):
         pass

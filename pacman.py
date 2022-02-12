@@ -2,9 +2,10 @@ import pygame
 
 from constantes import AMARELO, PRETO, VELOCIDADE, PARAR
 from elementos_jogo import ElementosJogo
+from movivel import Movivel
 
 
-class Pacman(ElementosJogo):
+class Pacman(ElementosJogo, Movivel):
     def __init__(self, tamanho):
         self.coluna = 1
         self.linha = 1
@@ -76,3 +77,10 @@ class Pacman(ElementosJogo):
     def aceitar_movimento(self):
         self.coluna = self.coluna_intencao
         self.linha = self.linha_intencao
+
+    def recusar_movimento(self, direcoes):
+        self.linha_intencao = self.linha
+        self.coluna_intencao = self.coluna
+
+    def esquina(self, direcoes):
+        pass

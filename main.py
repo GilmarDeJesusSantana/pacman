@@ -13,11 +13,12 @@ fonte = pygame.font.SysFont('arial', 24, True, False)
 size = 600 // 30
 pacman = Pacman(size)
 blinky = Fantasma(VERMELHO, BRANCO, PRETO, size)
-cenario = Cenario(size, pacman, fonte)
+cenario = Cenario(size, pacman, fonte, blinky)
 
 while True:
     # Calcular as regras
     pacman.calcular_regras()
+    blinky.calcular_regras()
     cenario.calcular_regras()
 
     # Pintar a tela
