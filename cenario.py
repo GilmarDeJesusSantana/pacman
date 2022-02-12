@@ -3,13 +3,13 @@ import pygame
 from constantes import AMARELO, PRETO, AZUL, VERMELHO, \
     ACIMA, ABAIXO, DIREITA, ESQUERDA
 from elementos_jogo import ElementosJogo
+from pacman import Pacman
 
 
 class Cenario(ElementosJogo):
-    def __init__(self, tamanho, pac, fonte, fantasma):
+    def __init__(self, tamanho, pac, fonte, ):
         self.pacman = pac
-        self.fantasma = fantasma
-        self.moviveis = [pac, fantasma]
+        self.moviveis = []
         self.tamanho = tamanho
         self.pontos = 0
         self.fonte = fonte
@@ -44,6 +44,9 @@ class Cenario(ElementosJogo):
             [2, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 2],
             [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
         ]
+
+    def adicionar_movivel(self, objetos):
+        self.moviveis.append(objetos)
 
     def pintar_pontos(self, tela):
         pontos_x = 30 * self.tamanho
@@ -96,28 +99,12 @@ class Cenario(ElementosJogo):
             if 0 <= coluna_intencao < 28 and 0 <= linha_intencao < 29 and \
                     self.matriz[linha_intencao][coluna_intencao] != 2:
                 movivel.aceitar_movimento()
+                if isinstance(movivel, Pacman) and self.matriz[linha][coluna] == 1:
+                    self.pontos += 1
+                    self.matriz[linha][coluna] = 0
+
             else:
                 movivel.recusar_movimento(direcoes)
-
-        # direcoes = self.get_direcoes(self.fantasma.linha, self.fantasma.coluna)
-        # if len(direcoes) >= 3:
-        #     self.fantasma.esquina(direcoes)
-        #
-        # col = self.pacman.coluna_intencao
-        # lin = self.pacman.linha_intencao
-        # if 0 <= col < 28 and 0 <= lin < 29:
-        #     if self.matriz[lin][col] != 2:
-        #         self.pacman.aceitar_movimento()
-        #         if self.matriz[lin][col] == 1:
-        #             self.pontos += 1
-        #             self.matriz[lin][col] = 0
-        #
-        # col_fantasma = int(self.fantasma.coluna_intencao)
-        # linha_fantasma = int(self.fantasma.linha_intencao)
-        # if 0 <= col_fantasma < 28 and 0 <= linha_fantasma < 29 and self.matriz[linha_fantasma][col_fantasma] != 2:
-        #     self.fantasma.aceitar_movimento()
-        # else:
-        #     self.fantasma.recusar_movimento(direcoes)
 
     def processar_eventos(self, eventos):
         for acao in eventos:
