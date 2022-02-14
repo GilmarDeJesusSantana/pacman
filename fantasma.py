@@ -1,4 +1,5 @@
-import pygame, random
+import pygame
+import random
 
 from constantes import ACIMA, ABAIXO, ESQUERDA, DIREITA
 from elementos_jogo import ElementosJogo
@@ -6,8 +7,8 @@ from elementos_jogo import ElementosJogo
 
 class Fantasma(ElementosJogo):
     def __init__(self, cor, cor_externa, cor_interna, tamanho):
-        self.coluna = 6.0
-        self.linha = 2.0
+        self.coluna = 13.0
+        self.linha = 15.0
         self.linha_intencao = self.linha
         self.coluna_intencao = self.coluna
         self.velocidade = 1
@@ -22,7 +23,7 @@ class Fantasma(ElementosJogo):
         px = int(self.coluna * self.tamanho)
         py = int(self.linha * self.tamanho)
         contorno = [(px, py + self.tamanho),
-                    (px + fatia * 2, py + fatia * 2),
+                    (px + fatia, py + fatia * 2),
                     (px + fatia * 2, py + fatia // 2),
                     (px + fatia * 3, py),
                     (px + fatia * 5, py),

@@ -17,6 +17,8 @@ class Pacman(ElementosJogo, Movivel):
         self.velocidade_y = 0
         self.coluna_intencao = self.coluna
         self.linha_intencao = self.linha
+        self.abertura = 0
+        self.velocidade_abertura = 1
 
     def calcular_regras(self):
         self.coluna_intencao += self.velocidade_x
@@ -30,10 +32,18 @@ class Pacman(ElementosJogo, Movivel):
             tela, AMARELO, (self.centro_x, self.centro_y), self.raio, 0
         )
 
+        self.abertura += self.velocidade_abertura
+        if self.abertura > self.raio:
+            self.velocidade_abertura = -1
+        if self.abertura <= 0:
+            self.velocidade_abertura = +1
+
         # Desenho da boca do Pacman
         canto_boca = (self.centro_x, self.centro_y)
-        labio_superior = (self.centro_x + self.raio, self.centro_y - self.raio)
-        labio_inferior = (self.centro_x + self.raio, self.centro_y)
+        labio_superior = (self.centro_x + self.raio, \
+                          self.centro_y - self.abertura)
+        labio_inferior = (self.centro_x + self.raio, \
+                          self.centro_y + self.abertura)
         pontos = [canto_boca, labio_superior, labio_inferior]
 
         pygame.draw.polygon(tela, PRETO, pontos, 0)

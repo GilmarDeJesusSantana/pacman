@@ -17,7 +17,7 @@ class Cenario(ElementosJogo):
         self.fonte = fonte
         self.matriz = [
             [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-            [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 2],
+            [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
             [2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1, 2],
             [2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1, 2],
             [2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1, 2],
@@ -43,7 +43,7 @@ class Cenario(ElementosJogo):
             [2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1, 2],
             [2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1, 2],
             [2, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 1, 2],
-            [2, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 2],
+            [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
             [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
         ]
 
@@ -78,6 +78,9 @@ class Cenario(ElementosJogo):
         elif self.estado == GAMEOVER:
             self.pintar_jogando(tela)
             self.pintar_gameover(tela)
+        elif self.estado == VITORIA:
+            self.pintar_jogando(tela)
+            self.pintar_vitoria(tela)
 
     def pintar_texto_centro(self, tela, texto):
         texto_img = self.fonte.render(texto, True, AMARELO)
@@ -90,6 +93,9 @@ class Cenario(ElementosJogo):
 
     def pintar_pausado(self, tela):
         self.pintar_texto_centro(tela, 'P A U S A D O')
+
+    def pintar_vitoria(self, tela):
+        self.pintar_texto_centro(tela, 'P A R A B E N S V O C Ê V E N C E U !!!!!')
 
     def pintar_jogando(self, tela):
         for numero_linha, linha in enumerate(self.matriz):
@@ -145,7 +151,8 @@ class Cenario(ElementosJogo):
                     if isinstance(movivel, Pacman) and self.matriz[linha][coluna] == 1:
                         self.pontos += 1
                         self.matriz[linha][coluna] = 0
-
+                        if self.pontos >= 306:
+                            self.estado = VITORIA
                 else:
                     movivel.recusar_movimento(direcoes)
 
