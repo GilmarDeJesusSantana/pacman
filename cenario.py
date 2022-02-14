@@ -1,7 +1,7 @@
 import pygame
 
 from constantes import AMARELO, PRETO, AZUL, VERMELHO, \
-    ACIMA, ABAIXO, DIREITA, ESQUERDA
+    ACIMA, ABAIXO, DIREITA, ESQUERDA, JOGANDO, PAUSADO, GAMEOVER, VITORIA
 from elementos_jogo import ElementosJogo
 from pacman import Pacman
 
@@ -10,6 +10,7 @@ class Cenario(ElementosJogo):
     def __init__(self, tamanho, pac, fonte, ):
         self.pacman = pac
         self.moviveis = []
+        self.estado = JOGANDO
         self.tamanho = tamanho
         self.pontos = 0
         self.fonte = fonte
@@ -68,6 +69,19 @@ class Cenario(ElementosJogo):
                 pygame.draw.circle(tela, VERMELHO, (x + half, y + half), self.tamanho // 2, 0)
 
     def pintar(self, tela):
+        if self.estado == JOGANDO:
+            self.pintar_jogando(tela)
+        elif self.estado == PAUSADO:
+            self.pintar_jogando(tela)
+            self.pintar_pausado(tela)
+
+    def pintar_pausado(self, tela):
+        texto_img = self.fonte.render('P A U S A D O', True, AMARELO)
+        texto_linha = (tela.get_width() - texto_img.get_width()) // 2
+        texto_coluna = (tela.get_height() - texto_img.get_height()) // 2
+        tela.blit(texto_img, (texto_linha, texto_coluna))
+
+    def pintar_jogando(self, tela):
         for numero_linha, linha in enumerate(self.matriz):
             self.pintar_linha(tela, numero_linha, linha)
 
@@ -87,6 +101,15 @@ class Cenario(ElementosJogo):
         return direcoes
 
     def calcular_regras(self):
+        if self.estado == JOGANDO:
+            self.calcular_regras_jogando()
+        elif self.estado == PAUSADO:
+            self.calcular_regras_pausado()
+
+    def calcular_regras_pausado(self):
+        pass
+
+    def calcular_regras_jogando(self):
         for movivel in self.moviveis:
             linha = int(movivel.linha)
             coluna = int(movivel.coluna)
@@ -110,3 +133,9 @@ class Cenario(ElementosJogo):
         for acao in eventos:
             if acao.type == pygame.QUIT:
                 exit()
+            if acao.type == pygame.KEYDOWN:
+                if acao.key == pygame.K_p:
+                    if self.estado == JOGANDO:
+                        self.estado = PAUSADO
+                    else:
+                        self.estado = JOGANDO
