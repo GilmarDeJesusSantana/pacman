@@ -15,6 +15,7 @@ class Cenario(ElementosJogo):
         self.tamanho = tamanho
         self.pontos = 0
         self.fonte = fonte
+        self.vidas = 5
         self.matriz = [
             [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
             [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
@@ -50,10 +51,12 @@ class Cenario(ElementosJogo):
     def adicionar_movivel(self, objetos):
         self.moviveis.append(objetos)
 
-    def pintar_pontos(self, tela):
+    def pintar_score(self, tela):
         pontos_x = 30 * self.tamanho
         img_pontos = self.fonte.render(f'Score: {self.pontos}', True, AMARELO)
+        vidas_img = self.fonte.render(f'Vidas: {self.vidas}', True, AMARELO)
         tela.blit(img_pontos, (pontos_x, 50))
+        tela.blit(vidas_img, (pontos_x, 100))
 
     def pintar_linha(self, tela, numero_linha, linha):
         for numero_coluna, coluna in enumerate(linha):
@@ -101,7 +104,7 @@ class Cenario(ElementosJogo):
         for numero_linha, linha in enumerate(self.matriz):
             self.pintar_linha(tela, numero_linha, linha)
 
-        self.pintar_pontos(tela)
+        self.pintar_score(tela)
 
     def get_direcoes(self, linha, coluna):
         direcoes = []
@@ -143,7 +146,13 @@ class Cenario(ElementosJogo):
             if isinstance(movivel, Fantasma) and \
                     movivel.linha == self.pacman.linha and \
                     movivel.coluna == self.pacman.coluna:
-                self.estado = GAMEOVER
+                self.vidas -= 1
+                if self.vidas <= 0:
+                    self.estado = GAMEOVER
+                else:
+                    self.pacman.linha = 1
+                    self.pacman.coluna = 1
+
             else:
                 if 0 <= coluna_intencao < 28 and 0 <= linha_intencao < 29 and \
                         self.matriz[linha_intencao][coluna_intencao] != 2:
